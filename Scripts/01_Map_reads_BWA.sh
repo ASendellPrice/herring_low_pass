@@ -12,7 +12,7 @@
 #Load required modules
 module load bioinfo-tools samtools/1.6 bwa
 
-#If directory "mapping" does not exist the create it
+#If directory "mapping" does not exist then create it
 if [[ ! -d mapping ]]
 then
     mkdir mapping
