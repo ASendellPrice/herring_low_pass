@@ -34,7 +34,7 @@ BAM_DIRECTORY=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_p
 
 #For each sample bam do the following
 while read -r line; do
-    samtools view -b ${BAM_DIRECTORY}/${line}.sort.bam ${CHROM} > chr${CHROM}.${line}.sort.bam
-    samtools index chr${CHROM}.${line}.sort.bam
-    samtools stats -@ 2 ${CHROM}.${line}.sort.bam > chr${CHROM}.${line}.stat
+    samtools view -b ${BAM_DIRECTORY}/${line}.sort.bam ${CHROM} > ${CHROM}.${line}.sort.bam
+    samtools index ${CHROM}.${line}.sort.bam
+    samtools stats -@ 2 ${CHROM}.${line}.sort.bam > ${CHROM}.${line}.stat
 done < "$SAMPLE_LIST"
