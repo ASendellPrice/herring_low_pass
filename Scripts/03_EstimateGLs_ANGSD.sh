@@ -6,7 +6,7 @@
 #SBATCH -M rackham
 #SBATCH -t 5-00:00:00
 #SBATCH -J GenotypeLikelihoods_ANGSD
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=FAIL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
 #Run from: /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass
