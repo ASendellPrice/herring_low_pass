@@ -9,25 +9,32 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
+#Run from: /proj/snic2020-2-19/private/herring/users/ashsendell/
+
 #Load required modules
 ml bioinfo-tools ANGSD/0.933
+
+#Create directory for analysis and move into it
+mkdir GenotypeLikelihoods_ANGSD
+cd GenotypeLikelihoods_ANGSD
+
 #Determine chromosome
 ChrName=chr${SLURM_ARRAY_TASK_ID}
 
-#STEP 3: Create directory for chromosome and move into it
+#Create directory for chromosome and move into it
 OUT_DIR=$ChrName
 mkdir $OUT_DIR
 cd $OUT_DIR
 
 #Create list of bam files
-#Text file containing sample bam paths
 ls /proj/snic2020-2-19/private/herring/users/ashsendell/Chrom_Bams/${ChrName}/*.sort.bam > bam.list
 
-#Run ANGSD
+#Set parameters
 REFGENOME=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 BAMLIST=bam.list
 OUT=${ChrName}_Ref.is.major_minMAF0.05
 
+#Run ANGSD
 angsd -b $BAMLIST -ref $REFGENOME \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 -trim 0 \
 -doMajorMinor 4 -doMaf 2 -GL 1 -doGlf 2 -SNP_pval 1e-6 -minMaf 0.05 \
