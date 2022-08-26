@@ -12,6 +12,10 @@
 #Load required modules
 module load bioinfo-tools samtools/1.6 bwa
 
+#Make directory and move into it
+mkdir mapping
+cd mapping
+
 #Set path to file specifying directories containing demultiplexed reads
 PATHS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/read_directories.txt
 
