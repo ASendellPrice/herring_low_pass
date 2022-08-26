@@ -38,4 +38,3 @@ while read -r line; do
     samtools index chr${CHROM}.${line}.sort.bam
     samtools stats -@ 2 chr${CHROM}.${line}.sort.bam > chr${CHROM}.${SAMPLE_ID}.stat
 done < "$SAMPLE_LIST"
-

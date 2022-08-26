@@ -4,7 +4,7 @@
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham
-#SBATCH -t 2:00:00
+#SBATCH -t 4:00:00
 #SBATCH -J mapping
 
 #Load required modules
@@ -27,8 +27,8 @@ DEMULTIPLED_READs=/crex/proj/snic2020-2-19/private/herring/users/mats/uppstore20
 #Set sample ID using slurm array task ID
 SAMPLE_ID=$(head -n $SLURM_ARRAY_TASK_ID $SAMPLE_LIST | tail -n 1)
 
-R1=${DEMULTIPLED_READs}*/*/${SAMPLE_ID}_R1.fastq.gz
-R2=${DEMULTIPLED_READs}*/*/${SAMPLE_ID}_R2.fastq.gz
+R1=${DEMULTIPLED_READs}*/*/*${SAMPLE_ID}_R1.fastq.gz
+R2=${DEMULTIPLED_READs}*/*/*${SAMPLE_ID}_R2.fastq.gz
 if [ -e $R1 ] && [ -e $R2 ]; then
         bwa mem -t 2 -R "@RG\tID:$SAMPLE_ID\tSM:$SAMPLE_ID" $REFGENOME $R1 $R2 > ${SAMPLE_ID}.sam  
         samtools view -@ 2 -b -S -o ${SAMPLE_ID}.bam ${SAMPLE_ID}.sam && rm ${SAMPLE_ID}.sam
