@@ -11,16 +11,11 @@
 module load bioinfo-tools samtools/1.6 bwa
 
 
-PATH=/crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/
+READ_DIRECTORIES=/crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/
 
 
 /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/mapping_lanes.txt
 
-
-180718_A00181_0044_AH3G5LDRXX   Lane1
-180718_A00181_0044_AH3G5LDRXX   Lane2
-180718_A00181_0045_BH3G55DRXX   Lane1
-180718_A00181_0045_BH3G55DRXX   Lane2
 
 
 /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/mapping_lanes.txt
