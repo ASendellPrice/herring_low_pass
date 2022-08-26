@@ -1,4 +1,4 @@
 /crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/180718_A00181_0044_AH3G5LDRXX/Lane1/
 /crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/180718_A00181_0044_AH3G5LDRXX/Lane2/
 /crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/180718_A00181_0045_BH3G55DRXX/Lane1/
-/crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/180718_A00181_0045_BH3G55DRXX/Lane1/
+/crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/180718_A00181_0045_BH3G55DRXX/Lane2/
