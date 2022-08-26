@@ -8,10 +8,18 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
+#Load required modules
 module load bioinfo-tools samtools/1.6 bwa
 
+#Set path to file specifying directories containing demultiplexed reads
+PATHS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_passread_directories.txt
 
-READ_DIRECTORIES=/crex/proj/snic2020-2-19/private/herring/users/mats/uppstore2017191/low_pass_de_multiplexing/
+#Set directory path according to slurm array ID
+READ_DIRECTORY=$(head -n $SLURM_ARRAY_TASK_ID $PATHS | tail -n 1)
+
+#Extract read ID (e.g. 180718_A00181_0044_AH3G5LDRXX) and lane number from path
+READ_ID=
+
 
 
 /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/mapping_lanes.txt
