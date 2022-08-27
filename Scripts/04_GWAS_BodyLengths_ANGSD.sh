@@ -51,6 +51,6 @@ done < "$SAMPLE_LIST"
 #Run ANGSD
 angsd -b bam.list -ref $REFGENOME \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 -trim 0 \
--doMajorMinor 4 -doMaf 2 -GL 1 -doGlf 2 -SNP_pval 1e-6 -minMaf 0.05 \
+-doMajorMinor 4 -doMaf 2 -GL 1 -doGlf 2 -doPost 1 -SNP_pval 1e-6 -minMaf 0.05 \
 -doAsso 2 -yQuant $PHENOTYPE -cov $COVARIATES \
 -out $OUT -P 5
