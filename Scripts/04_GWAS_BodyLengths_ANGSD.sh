@@ -22,7 +22,7 @@ fi
 cd gwas_bodylength_angsd
 
 #Determine chromosome name using slurm array task id
-$CHROM=chr${SLURM_ARRAY_TASK_ID}
+CHROM=chr${SLURM_ARRAY_TASK_ID}
 
 #Create directory for chromosome and move into it
 mkdir $CHROM
