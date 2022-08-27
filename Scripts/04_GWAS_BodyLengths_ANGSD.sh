@@ -45,7 +45,7 @@ OUT=Association_BodyLength_${CHROM}
 #Create a bam input list by looping through the sample list
 #Create list of chromosome bam files
 while read -r line; do
-    ls ${BAM_DIRECTORY}/${CHROM}.${line}.sort.bam >> bam.list
+    ls ${BAM_DIRECTORY}/${CHROM}.*-${line}.sort.bam >> bam.list
 done < "$SAMPLE_LIST"
 
 #Run ANGSD
