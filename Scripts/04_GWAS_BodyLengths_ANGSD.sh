@@ -9,6 +9,9 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
+#Load required modules
+ml bioinfo-tools ANGSD/0.933
+
 #If directory "gwas_bodylength_angsd" does not exist then create it
 if [[ ! -d gwas_angsd ]]
 then
