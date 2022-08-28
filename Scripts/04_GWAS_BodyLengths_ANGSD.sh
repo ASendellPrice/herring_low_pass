@@ -2,6 +2,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH --array=1-1:1
 #SBATCH -p node
+#SBATCH -C mem256GB
 #SBATCH -n 1
 #SBATCH -M rackham
 #SBATCH -t 1-00:00:00
