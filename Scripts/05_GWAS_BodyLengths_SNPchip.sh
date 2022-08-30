@@ -46,21 +46,32 @@ vcf2gwas \
 
 
 #Set path to VCF, sample list, PHENOTYPE and COVARIATE files
-VCF=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/imputed_genos/AllChromsMerged.phased.imputed.merged.minMAF0.01_UpdatedIDs.vcf.gz
-SAMPLE_IDS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/imputed_genos/sampleIDs_imputed.txt
-PHENOS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/bodylength_phenos.csv
-COVS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/bodylength_covs.csv
+VCF=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/VCFs/AllChromsMerged.phased.imputed.merged.minMAF0.01_NumericIDs.vcf.gz
+SAMPLE_IDS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/gwas_GEMMA/sampleIDs_imputed.txt
+PHENOS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/gwas_GEMMA/BodyLength_BodyWeight.csv
+COVS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/gwas_GEMMA/Sex_Age.csv
 
 #Reorder phenotype and covariate files so their order matches the sample order in the VCF file
-head -n 1 $PHENOS > pheno.input
-head -n 1 $COVS > covs.input
+head -n 1 $PHENOS > imputed.bodylength.bodyweight.pheno.input
+head -n 1 $COVS > imputed.bodylength.bodyweight.covs.input
 for SAMPLE in $(cat $SAMPLE_IDS)
 do
-    grep -w $SAMPLE $PHENOS >> pheno.input
-    grep -w $SAMPLE $COVS >> covs.input
+    SAMPLE_LINE_NO=$(cat $PHENOS | cut -d "," -f 1 | grep -w $SAMPLE -n | cut -d ":" -f 1)
+    if [ ! -z "$SAMPLE_LINE_NO" ]
+    then
+        head -n $SAMPLE_LINE_NO $PHENOS | tail -n 1 >> imputed.bodylength.bodyweight.pheno.input
+        head -n $SAMPLE_LINE_NO $COVS | tail -n 1  >> imputed.bodylength.bodyweight.covs.input
+    fi
 done
 
 
 
-bcftools reheader --samples ../gwas_imputed/sampleIDs_imputed.txt -o AllChromsMerged.phased.imputed.merged.minMAF0.01_NumericIDs.vcf.gz \
-/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/imputed_genos/AllChromsMerged.phased.imputed.merged.minMAF0.01_UpdatedIDs.vcf.gz
+
+#Run vcf2gwas
+vcf2gwas \
+-v $VCF \
+-gf /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/Clupea_harengus.Ch_v2.0.2.107.gff \
+-pf pheno.input \
+--topsnp 200 \
+-o BodyLength_Age_Sex \
+-p 1 -lmm -cf covs.input -c 1 -c 2 
