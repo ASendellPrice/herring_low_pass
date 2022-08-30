@@ -61,3 +61,7 @@ do
 done
 
 
+
+bcftools reheader -s 
+
+/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/imputed_genos/AllChromsMerged.phased.imputed.merged.minMAF0.01_UpdatedIDs.vcf.gz
