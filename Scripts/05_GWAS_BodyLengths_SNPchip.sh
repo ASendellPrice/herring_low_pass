@@ -62,6 +62,5 @@ done
 
 
 
-bcftools reheader -s 
-
+bcftools reheader --samples ../gwas_imputed/sampleIDs_imputed.txt -o AllChromsMerged.phased.imputed.merged.minMAF0.01_NumericIDs.vcf.gz \
 /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/SNP-chip/bodylength_gwas_gemma/imputed_genos/AllChromsMerged.phased.imputed.merged.minMAF0.01_UpdatedIDs.vcf.gz
