@@ -144,7 +144,7 @@ cd GLIMPSE_impute
 
 VCF=../genotype_likelihoods/merged.${ChrName}.vcf.gz
 REF=../reference/herring_sentieon_91ind_190521.SV.VF.F2.maxDPtriple.setGT.variantsOnly.${ChrName}.phased.vcf.gz
-MAP=../../../resources/chrom_maps/${ChrName}.GLIMPSE.gmap.txt
+MAP=../../../resources/imputation/chrom_maps/${ChrName}.GLIMPSE.gmap.txt
 
 while IFS="" read -r LINE || [ -n "$LINE" ];
 do
