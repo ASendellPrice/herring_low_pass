@@ -38,9 +38,8 @@ fi
 cd GLIMPSE_imputation
 
 #Make directory for focal chrom and move into it
-OUT_DIR=$ChrName
-mkdir $OUT_DIR
-cd $OUT_DIR
+mkdir $ChrName
+cd $ChrName
 
 ######################################################################################
 #STEP 4: Create reference panel and list of known SNPs for chromosome
