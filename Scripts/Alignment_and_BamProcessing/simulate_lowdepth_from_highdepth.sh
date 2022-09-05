@@ -28,8 +28,10 @@ BAM=$(ls /proj/snic2020-2-19/private/herring/alignment/79_individuals/*.bam | he
 #Get ID from bam file name
 SAMPLE_ID=$(basename $BAM | cut -d "." -f 1)
 
-#Calculate average depth of coverage for bam
-MEAN_DEPTH=$(samtools depth -a $BAM | awk '{sum+=$3} END {print sum/NR}')
+#Calculate current average depth of bam
+REFGENOME=/crex/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
+REFGENOME_LENGTH=$(cat ${REFGENOME}.fai | awk '{sum+=$2} END {print sum}')
+MEAN_DEPTH=$(samtools depth -a $BAM | awk -v len=${REFGENOME_LENGTH} '{sum+=$3} END { print sum/len}')
 
 #Calculate proportion of reads to keep to acheive desired depth of coverage
 PROP_RETAIN=$(awk "BEGIN {print $TARGET_DEPTH/$MEAN_DEPTH}")
@@ -49,4 +51,8 @@ rm downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
 #Index bam file and output stats
 samtools index -@ 2 downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
 samtools stats -@ 2 downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.stat
-samtools depth downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam | awk '{sum+=$3} END { print sum/NR}' > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.depth
+
+#Calculate sequencing depth of downsampled bam
+samtools depth downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam \
+| awk -v len=${REFGENOME_LENGTH} '{sum+=$3} END { print sum/len}' \
+> downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.depth

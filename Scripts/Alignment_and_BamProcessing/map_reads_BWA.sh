@@ -4,7 +4,7 @@
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham
-#SBATCH -t 2:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH -J mapping
 
 #Load required modules
@@ -30,8 +30,7 @@ REFGENOME_LENGTH=$(cat ${REFGENOME}.fai | awk '{sum+=$2} END {print sum}')
 #Set sample ID using slurm array task ID
 SAMPLE_ID=$(head -n $SLURM_ARRAY_TASK_ID $SAMPLE_LIST | tail -n 1)
 
-#Calculate
-
+#Map reads and calculate stats 
 R1=${DEMULTIPLED_READs}*/*/*${SAMPLE_ID}_R1.fastq.gz
 R2=${DEMULTIPLED_READs}*/*/*${SAMPLE_ID}_R2.fastq.gz
 if [ -e $R1 ] && [ -e $R2 ]; then
