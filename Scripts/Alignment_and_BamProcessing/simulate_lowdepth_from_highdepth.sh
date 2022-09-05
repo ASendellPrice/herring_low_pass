@@ -11,11 +11,12 @@
 #Load required modules
 ml bioinfo-tools samtools
 
-#Create directory for simulated low pass data
+#Create directory for simulated low pass data and move into it
 if [[ ! -d simulated_low_pass ]]
 then
     mkdir simulated_low_pass
 fi
+cd simulated_low_pass
 
 #Set desired depth of coverage based on average coverage of the 944 low pass samples
 TARGET_DEPTH=$(cat ../mapping/*.depth | awk '{sum+=$1} END { print sum/NR}')
