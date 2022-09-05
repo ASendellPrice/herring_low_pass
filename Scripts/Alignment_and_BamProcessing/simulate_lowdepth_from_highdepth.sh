@@ -12,11 +12,11 @@
 ml bioinfo-tools samtools
 
 #Create directory for simulated low pass data and move into it
-if [[ ! -d simulated_low_pass ]]
+if [[ ! -d downsample_high_pass ]]
 then
-    mkdir simulated_low_pass
+    mkdir downsample_high_pass
 fi
-cd simulated_low_pass
+cd downsample_high_pass
 
 #Set desired depth of coverage based on average coverage of the 944 low pass samples
 TARGET_DEPTH=$(cat ../mapping/*.depth | awk '{sum+=$1} END { print sum/NR}')
@@ -33,13 +33,13 @@ do
     #Round proportion to 3 decimal places
     PROP_RETAIN_3D=$(printf '%.*f\n' 3 $PROP_RETAIN)
     #Downsample bam file
-    samtools view -s $PROP_RETAIN_3D -b $BAM > subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
+    samtools view -s $PROP_RETAIN_3D -b $BAM > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
     #Sort bam file
-    samtools sort subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam -o subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
+    samtools sort downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam -o downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
     #Remove un-sorted bam
-    rm subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
+    rm downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
     #Index bam file and output stats
-    samtools index -@ 2 subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
-    samtools stats -@ 2 subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam > subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.stat
-    samtools depth subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam | awk '{sum+=$3} END { print sum/NR}' > subsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.depth
+    samtools index -@ 2 downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
+    samtools stats -@ 2 downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.stat
+    samtools depth downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam | awk '{sum+=$3} END { print sum/NR}' > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.depth
 done
