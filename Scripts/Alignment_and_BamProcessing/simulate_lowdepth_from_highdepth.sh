@@ -3,7 +3,7 @@
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham
-#SBATCH -t 2-00:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH -J DownsampleBams
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
