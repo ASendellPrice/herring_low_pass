@@ -28,13 +28,18 @@ CHROM=chr${SLURM_ARRAY_TASK_ID}
 mkdir ${CHROM}
 cd ${CHROM}
 
-#Set path to sample list and directory containing sample BAMs
-SAMPLE_LIST=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/sample.list.txt
-BAM_DIRECTORY=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/mapping
+#For each of the low pass bam files do the the following:
+for BAM in $(ls ../../mapping/*.sort.bam)
+do
+    BASE_NAME=$(basename $BAM)
+    samtools view -b $BAM ${CHROM} > ${CHROM}.${BASE_NAME}
+    samtools index ${CHROM}.${BASE_NAME}
+done
 
-#For each sample bam do the following
-while read -r line; do
-    samtools view -b ${BAM_DIRECTORY}/${line}.sort.bam ${CHROM} > ${CHROM}.${line}.sort.bam
-    samtools index ${CHROM}.${line}.sort.bam
-    samtools stats -@ 2 ${CHROM}.${line}.sort.bam > ${CHROM}.${line}.stat
-done < "$SAMPLE_LIST"
+#Now do the same for the simulated low pass bams ...
+for BAM in $(ls ../../simulated_low_pass/*.sort.bam)
+do
+    BASE_NAME=$(basename $BAM)
+    samtools view -b $BAM ${CHROM} > ${CHROM}.${BASE_NAME}
+    samtools index ${CHROM}.${BASE_NAME}
+done

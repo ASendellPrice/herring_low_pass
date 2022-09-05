@@ -19,7 +19,6 @@ fi
 
 #Set desired depth of coverage based on average coverage of the 944 low pass samples
 TARGET_DEPTH=$(cat ../mapping/*.depth | awk '{sum+=$1} END { print sum/NR}')
-echo $TARGET_DEPTH > target.depth
 
 #For each of the high depth bams do the following ...
 for BAM in $(ls /proj/snic2020-2-19/private/herring/alignment/79_individuals/*.bam)
