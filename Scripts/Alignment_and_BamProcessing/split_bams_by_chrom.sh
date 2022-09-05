@@ -36,8 +36,8 @@ do
     samtools index ${CHROM}.${BASE_NAME}
 done
 
-#Now do the same for the simulated low pass bams ...
-for BAM in $(ls ../../simulated_low_pass/*.sort.bam)
+#Now do the same for the simulated (downsampled) low pass bams ...
+for BAM in $(ls ../../downsample_high_pass/*.sort.bam)
 do
     BASE_NAME=$(basename $BAM)
     samtools view -b $BAM ${CHROM} > ${CHROM}.${BASE_NAME}
