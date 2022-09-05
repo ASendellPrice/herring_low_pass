@@ -2,7 +2,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
-#SBATCH -M snowy
+#SBATCH -M rackham
 #SBATCH -t 2-00:00:00
 #SBATCH -J DownsampleBams
 #SBATCH --mail-type=FAIL
