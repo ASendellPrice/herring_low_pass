@@ -87,20 +87,13 @@ cd ../
 #STEP 6: Computing GLs for each individual at variable sites in reference panel
 ######################################################################################
 
-Make directory for GLs
+#Make directory for GLs
 mkdir genotype_likelihoods
 cd genotype_likelihoods
 
-#Create bam file list - a text file containing sample bam paths
-for SAMPLE in $(cat ../../resources/imputation/samples_to_impute.txt)
+#Compute GLs from low pass bams
+for BAM in $(ls ../../chrom_bams/${ChrName}/*.bam)
 do
-    ls ../../chrom_bams/${ChrName}/${ChrName}.${SAMPLE}.sort.bam > ${ChrName}.bam.list
-done
-
-#Compute GLs
-for BAM in $(cat ${ChrName}.bam.list)
-do
-samtools index $BAM
 SAMPLE_ID=$(basename $BAM | cut -d "." -f 2)
 VCF=../reference/herring_sentieon_91ind_190521.SV.VF.F2.maxDPtriple.setGT.variantsOnly.${ChrName}.phased.vcf.gz
 TSV=../reference/${ChrName}.sites.tsv.gz
