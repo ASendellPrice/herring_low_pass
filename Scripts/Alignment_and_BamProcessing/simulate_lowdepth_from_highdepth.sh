@@ -40,19 +40,19 @@ PROP_RETAIN=$(awk "BEGIN {print $TARGET_DEPTH/$MEAN_DEPTH}")
 PROP_RETAIN_3D=$(printf '%.*f\n' 3 $PROP_RETAIN)
 
 #Downsample bam file
-samtools view -s $PROP_RETAIN_3D -b $BAM > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
+samtools view -s $PROP_RETAIN_3D -b $BAM > ${SAMPLE_ID}.bam
 
 #Sort bam file
-samtools sort downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam -o downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
+samtools sort ${SAMPLE_ID}.bam -o ${SAMPLE_ID}.sort.bam
 
 #Remove un-sorted bam
-rm downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.bam
+rm ${SAMPLE_ID}.bam
 
 #Index bam file and output stats
-samtools index -@ 2 downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam
-samtools stats -@ 2 downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam > downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.stat
+samtools index -@ 2 ${SAMPLE_ID}.sort.bam
+samtools stats -@ 2 ${SAMPLE_ID}.sort.bam > ${SAMPLE_ID}.stat
 
 #Calculate sequencing depth of downsampled bam
-samtools depth downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.sort.bam \
+samtools depth ${SAMPLE_ID}.sort.bam \
 | awk -v len=${REFGENOME_LENGTH} '{sum+=$3} END { print sum/len}' \
-> downsampled_${TARGET_DEPTH}X.${SAMPLE_ID}.depth
+> ${SAMPLE_ID}.depth
