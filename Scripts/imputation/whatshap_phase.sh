@@ -18,7 +18,7 @@ conda activate /home/ashle/conda_envs/impute_genos
 #conda install whatshap nomkl
 
 #Load other required modules and set path to GLIMPSE directory
-ml bioinfo-tools GATK/4.1.1.0 bcftools/1.10
+ml bioinfo-tools GATK/4.1.1.0 
 
 #Set chromosome name and create / move into chromosome directory
 ChrName=chr${SLURM_ARRAY_TASK_ID}
@@ -45,5 +45,23 @@ GVCFs=$(ls /proj/snic2020-2-19/private/herring/variants/herring_79individuals/*/
 gatk CombineGVCFs -R $REFGENOME $GVCFs --intervals $ChrName -O ${ChrName}.herring_79individuals.g.vcf.gz
 
 #Call sample genotypes using GATK GenotypeGVCFs
-gatk --java-options "-Xmx4g" GenotypeGVCFs -R $REFGENOME \
+gatk GenotypeGVCFs -R $REFGENOME \
 -V ${ChrName}.herring_79individuals.g.vcf.gz -O ${ChrName}.herring_79individuals.vcf.gz
+
+#Remove intermediate GVCF
+rm ${ChrName}.herring_79individuals.g.vcf.gz
+
+#NEXT NEED TO APPLY FILTERING TO VCF AND REMOVE INTERMEDIATE FILES
+#Apply hard filtering to VCF file
+vcftools --gzvcf ${ChrName}.herring_79individuals.vcf.gz \
+--remove-indels --min-alleles 2 --max-alleles 2 --mac 2 --minGQ 30 --minDP 10 --max-missing 0.8 \
+--recode --out ${ChrName}.herring_79individuals.filtered.vcf
+
+#Remove unfiltered VCF
+rm ${ChrName}.herring_79individuals.filtered.vcf
+
+#Phase the filtered VCF using whatshap
+BAMS=$(ls /proj/snic2020-2-19/private/herring/alignment/79_individuals/*.bam | tr "\n" " ")
+whatshap phase -o ${ChrName}.79_high_depth_samples.phased.vcf \
+--reference=${REFGEN} ${ChrName}.79_high_depth_samples.recode.vcf $BAMS
+
