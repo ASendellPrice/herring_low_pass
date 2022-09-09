@@ -61,7 +61,6 @@ vcftools --gzvcf ${ChrName}.herring_79individuals.vcf.gz \
 rm ${ChrName}.herring_79individuals.filtered.vcf
 
 #Phase the filtered VCF using whatshap
-BAMS=$(ls /proj/snic2020-2-19/private/herring/alignment/79_individuals/*.bam | tr "\n" " ")
-whatshap phase -o ${ChrName}.79_high_depth_samples.phased.vcf \
---reference=${REFGEN} ${ChrName}.79_high_depth_samples.recode.vcf $BAMS
-
+#BAMS=$(ls /proj/snic2020-2-19/private/herring/alignment/79_individuals/*.bam | tr "\n" " ")
+#whatshap phase -o ${ChrName}.79_high_depth_samples.phased.vcf \
+#--reference=${REFGEN} ${ChrName}.79_high_depth_samples.recode.vcf $BAMS
