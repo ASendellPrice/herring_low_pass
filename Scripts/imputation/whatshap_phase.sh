@@ -5,7 +5,7 @@
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham
-#SBATCH -t 5:00:00
+#SBATCH -t 2-00:00:00
 #SBATCH -J whatshapp_phase
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -42,7 +42,7 @@ cd ${ChrName}/reference
 #Combine sample GVCFs using GATK CombineGVCFs
 REFGENOME=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 GVCFs=$(ls /proj/snic2020-2-19/private/herring/variants/herring_79individuals/*/*.g.vcf.gz | sed -e 's/^/--variant /' | tr "\n" " " )
-gatk CombineGVCFs -R $REFGENOME $GVCFs --intervals $ChrName -O ${ChrName}.herring_79individuals.g.vcf.gz
+#gatk CombineGVCFs -R $REFGENOME $GVCFs --intervals $ChrName -O ${ChrName}.herring_79individuals.g.vcf.gz
 
 #Call sample genotypes using GATK GenotypeGVCFs
 gatk GenotypeGVCFs -R $REFGENOME \
@@ -51,7 +51,6 @@ gatk GenotypeGVCFs -R $REFGENOME \
 #Remove intermediate GVCF
 rm ${ChrName}.herring_79individuals.g.*
 
-#NEXT NEED TO APPLY FILTERING TO VCF AND REMOVE INTERMEDIATE FILES
 #Apply hard filtering to VCF file
 vcftools --gzvcf ${ChrName}.herring_79individuals.vcf.gz \
 --remove-indels --min-alleles 2 --max-alleles 2 --mac 2 --minGQ 30 --minDP 10 --max-missing 0.6 \
