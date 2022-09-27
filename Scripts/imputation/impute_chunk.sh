@@ -3,7 +3,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
-#SBATCH -M snowy
+#SBATCH -M rackham
 #SBATCH -t 10-00:00:00
 #SBATCH -J Genotype_Imputation_Chunk
 #SBATCH --mail-type=FAIL

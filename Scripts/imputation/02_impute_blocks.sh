@@ -110,7 +110,7 @@ ORG=$(echo $LINE | cut -d" " -f4)
 OUT=${ChrName}.${ID}_GLIMPSE.bcf
 
 #Launch glimpse imputation on chunk in a seperate job, passing the required variables
-sbatch ../../../scripts/imputation/impute_chunk.sh $VCF $REF $MAP $IRG $ORG $OUT
+sbatch ../../../Scripts/imputation/impute_chunk.sh $VCF $REF $MAP $IRG $ORG $OUT
 
 done < ../reference/chunks.${ChrName}.txt
 
