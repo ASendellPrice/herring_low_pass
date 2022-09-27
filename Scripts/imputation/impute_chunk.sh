@@ -4,7 +4,7 @@
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham
-#SBATCH -t 10-00:00:00
+#SBATCH -t 5-00:00:00
 #SBATCH -J Genotype_Imputation_Chunk
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
