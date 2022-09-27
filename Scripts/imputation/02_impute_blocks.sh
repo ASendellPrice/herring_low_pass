@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#SBATCH --array=1-26:1
+#SBATCH --array=26-26:1
 #SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
@@ -19,57 +19,28 @@ GLIMPSE_DIR=/crex/proj/snic2020-2-19/private/darwins_finches/users/erikenbody/Fi
 ml bioinfo-tools ABINIT/8.10.3 GCCcore/8.3.0 bcftools/1.10 samtools vcftools
 
 ######################################################################################
-#STEP 2: Determine chromosome using slurm array job id
+#STEP 2: Determine chromosome using slurm array job id and move into directory
 ######################################################################################
 
 ChrName=chr${SLURM_ARRAY_TASK_ID}
-
-######################################################################################
-#STEP 3: Create directories
-######################################################################################
-
-#Create / move into directory "GLIMPSE_imputation"
-if [[ ! -d GLIMPSE_imputation ]]
-then
-    mkdir GLIMPSE_imputation
-    cd GLIMPSE_imputation
-else
-    cd GLIMPSE_imputation
-fi
-
-#Make directory for focal chrom and move into it
-mkdir $ChrName
-cd $ChrName
-
-######################################################################################
-#STEP 4: Create reference panel and list of known SNPs for chromosome
-######################################################################################
-
-#Make directory for reference panel and move into it
-mkdir reference
-cd reference
-
-#Filter phased 79 high individual VCF keeping only biallelic sites within focal chromosome
-vcftools --gzvcf /proj/snic2020-2-19/private/herring/variants/79.phased.vcf.gz \
---min-alleles 2 --max-alleles 2 --remove-indels --chr $ChrName --recode --stdout \
-| bgzip > ${ChrName}.79.phased.vcf.gz
-
-#Index that VCF
-bcftools index ${ChrName}.79.phased.vcf.gz
-
-# Create a list of known variable sites, we will use this later when calculating GLs for low pass data
-bcftools query -f '%CHROM\t%POS\t%REF,%ALT\n' \
-${ChrName}.79.phased.vcf.gz \
-| bgzip -c > ${ChrName}.sites.tsv.gz
-tabix -s1 -b2 -e2 ${ChrName}.sites.tsv.gz -f
+cd GLIMPSE_imputation/${ChrName}/reference
 
 ######################################################################################
 #STEP 5: Split the chromosome into chunks
 ######################################################################################
 
-#This generates a file containing the imputation chunks and larger chunks including buffers that we will use to run GLIMPSE_phase.
+#Index VCF
+bcftools index ${ChrName}.herring_79individuals.filtered.phased.vcf.gz
+
+# Create a list of known variable sites, we will use this later when calculating GLs for low pass data
+bcftools query -f '%CHROM\t%POS\t%REF,%ALT\n' \
+${ChrName}.herring_79individuals.filtered.phased.vcf.gz \
+| bgzip -c > ${ChrName}.sites.tsv.gz
+tabix -s1 -b2 -e2 ${ChrName}.sites.tsv.gz -f
+
+#Generate a file containing the imputation chunks and larger chunks including buffers that we will use to run GLIMPSE_phase.
 $GLIMPSE_DIR/chunk/bin/GLIMPSE_chunk \
---input ${ChrName}.79.phased.vcf.gz \
+--input ${ChrName}.herring_79individuals.filtered.phased.vcf.gz \
 --region ${ChrName} --window-size 2000000 --buffer-size 200000 \
 --output chunks.${ChrName}.txt
 
@@ -91,7 +62,7 @@ REFGEN=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 for BAM in $(ls ../../../chrom_bams/${ChrName}/*.bam)
 do
     SAMPLE_ID=$(basename $BAM | sed "s/${ChrName}.//g" | sed "s/.sort.bam//g")
-    VCF=../reference/${ChrName}.79.phased.vcf.gz
+    VCF=../reference/${ChrName}.herring_79individuals.filtered.phased.vcf.gz
     TSV=../reference/${ChrName}.sites.tsv.gz
     OUT=${ChrName}.${SAMPLE_ID}.vcf.gz
     bcftools mpileup -f ${REFGEN} -I -E -a 'FORMAT/DP' -T ${VCF} -r ${ChrName} -q 20 -Q 20 ${BAM} -Ou | bcftools call -Aim -C alleles -T ${TSV} -Oz -o ${OUT}
@@ -128,7 +99,7 @@ mkdir -p GLIMPSE_impute
 cd GLIMPSE_impute
 
 VCF=../genotype_likelihoods/merged.${ChrName}.vcf.gz
-REF=../reference/${ChrName}.79.phased.vcf.gz
+REF=../reference/${ChrName}.herring_79individuals.filtered.phased.vcf.gz
 MAP=../../../resources/imputation/chrom_maps/${ChrName}.GLIMPSE.gmap.txt
 
 while IFS="" read -r LINE || [ -n "$LINE" ];

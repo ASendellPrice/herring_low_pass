@@ -69,5 +69,4 @@ whatshap phase -o ${ChrName}.herring_79individuals.filtered.phased.vcf.gz \
 --reference=${REFGEN} ${ChrName}.herring_79individuals.filtered.vcf.gz $BAMS
 
 #remove un-phased VCF
-#rm ${ChrName}.herring_79individuals.filtered.vcf.gz
-
+rm ${ChrName}.herring_79individuals.filtered.vcf.gz
