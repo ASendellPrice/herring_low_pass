@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#SBATCH --array=26-26:1
+#SBATCH --array=1-26:1
 #SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
@@ -113,7 +113,5 @@ OUT=${ChrName}.${ID}_GLIMPSE.bcf
 sbatch ../../../Scripts/imputation/impute_chunk.sh $VCF $REF $MAP $IRG $ORG $OUT
 
 done < ../reference/chunks.${ChrName}.txt
-
-
 
 ######################################################################################
