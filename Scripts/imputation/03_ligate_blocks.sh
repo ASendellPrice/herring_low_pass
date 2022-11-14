@@ -1,10 +1,10 @@
 #!/bin/bash -l
 
-#SBATCH --array=1-26:1
-#SBATCH -A snic2021-5-8
+#SBATCH --array=1-1:1
+#SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
-#SBATCH -M snowy
+#SBATCH -M rackham
 #SBATCH -t 1-00:00:00
 #SBATCH -J GLIMPSE_ligate
 #SBATCH --mail-type=FAIL
