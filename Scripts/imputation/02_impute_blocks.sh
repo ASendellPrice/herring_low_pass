@@ -1,17 +1,17 @@
 #!/bin/bash -l
 
-#SBATCH --array=1-26:1
+#SBATCH --array=21-21:1
 #SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham
-#SBATCH -t 5:00:00
+#SBATCH -t 10:00:00
 #SBATCH -J Genotype_Imputation
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
 ######################################################################################
-#STEP 1: Define paths to GLIMPSE and load required modules
+#Define paths to GLIMPSE and load required modules
 ######################################################################################
 
 #Load other required modules and set path to GLIMPSE directory
@@ -19,17 +19,17 @@ GLIMPSE_DIR=/crex/proj/snic2020-2-19/private/darwins_finches/users/erikenbody/Fi
 ml bioinfo-tools ABINIT/8.10.3 GCCcore/8.3.0 bcftools/1.10 samtools vcftools
 
 ######################################################################################
-#STEP 2: Determine chromosome using slurm array job id and move into directory
+#Determine chromosome using slurm array job id and move into directory
 ######################################################################################
 
 ChrName=chr${SLURM_ARRAY_TASK_ID}
 cd GLIMPSE_imputation/${ChrName}/reference
 
 ######################################################################################
-#STEP 5: Split the chromosome into chunks
+# Split the chromosome into chunks
 ######################################################################################
 
-#Index VCF
+#Index VCF (this is the reference panel)
 bcftools index ${ChrName}.herring_79individuals.filtered.phased.vcf.gz
 
 # Create a list of known variable sites, we will use this later when calculating GLs for low pass data
@@ -48,7 +48,7 @@ $GLIMPSE_DIR/chunk/bin/GLIMPSE_chunk \
 cd ../
 
 ######################################################################################
-#STEP 6: Computing GLs for each individual at variable sites in reference panel
+#Computing GLs for each individual at variable sites in reference panel
 ######################################################################################
 
 #Make directory for GLs
@@ -87,7 +87,7 @@ rm list.txt ${ChrName}.*.gz*
 cd ../
 
 ######################################################################################
-#STEP 7: Running GLIMPSE
+#Running GLIMPSE
 ######################################################################################
 
 #To run GLIMPSE_phase we only need to run a job for each imputation chunk. Each job runs on 1 thread.
