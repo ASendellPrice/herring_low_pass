@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#SBATCH --array=21-21:1
+#SBATCH --array=2-3:1
 #SBATCH -A snic2022-5-242
 #SBATCH -p core
 #SBATCH -n 1
