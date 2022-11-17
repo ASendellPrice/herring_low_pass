@@ -56,3 +56,19 @@ $ANGSD -b chr.bam.list \
 # -SNP_pval = significance threshold for determining true polymorphism
 # -minInd = Discard the sites where we don't have data from -minInd individuals (500 here)
 # ==============================
+
+#STEP 6: Convert sample names in VCF to something meaningful
+#Convert list of bam paths to sample names
+for LINE in $(cat chr.bam.list)
+do
+    basename $LINE | cut -d "." -f 2 >> sample.IDs.txt
+done
+
+#Update IDs using bcftools
+ml bioinfo-tools bcftools
+bcftools reheader --samples sample.IDs.txt \
+-o HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}_updatedIDs.vcf.gz \
+HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
+
+#Remove old VCF file
+rm HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
