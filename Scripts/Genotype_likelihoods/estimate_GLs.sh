@@ -16,11 +16,11 @@
 # 2. Beagle (genotype likelihood format)
 # 3. MAFs (allele frequencies)
 
-# A. Sendell-Price, June 2021
+# A. Sendell-Price, Nov 2022
 ######################################################################################
 
-#STEP 1: Define paths to ANGSD
-ANGSD=/proj/snic2020-2-19/private/herring/users/ashsendell/BIN/angsd/angsd
+#STEP 1: Load required modules
+ml bioinfo-tools ANGSD/0.921
 
 #STEP 2: Determine chromosome
 ChrName=chr${SLURM_ARRAY_TASK_ID}
@@ -34,7 +34,7 @@ cd $ChrName
 ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_bams/${ChrName}/*.sort.bam > chr.bam.list
 
 #STEP 5: Run ANGSD
-$ANGSD -b chr.bam.list \
+angsd -b chr.bam.list \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
 -GL 2 -doMajorMinor 1 -doMaf 1 -doPost 2 -doVcf 1 -doGlf 2 -minMaf 0.05 -SNP_pval 1e-6 \
 -minInd 500 -out HerringLowPass_GATKMethod_MinMAF0.05_${ChrName} -P 20 \
@@ -72,3 +72,4 @@ HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
 
 #Remove old VCF file
 rm HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
+
