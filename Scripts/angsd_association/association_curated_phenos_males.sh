@@ -71,5 +71,5 @@ $ANGSD \
 -whichPhe gonad_weight \
 -whichCov age \
 -doAsso 4 -nInd $N_INDV -doMaf 4 \
--out ${ChrName}_association_gonad_weight
+-out ${ChrName}_association_male_gonad_weight
 
