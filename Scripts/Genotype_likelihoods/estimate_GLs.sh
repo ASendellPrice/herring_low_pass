@@ -4,7 +4,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p node -N 1
 #SBATCH -M rackham
-#SBATCH -t 5-00:00:00
+#SBATCH -t 2-00:00:00
 #SBATCH -J Genotype_likelihoods
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
