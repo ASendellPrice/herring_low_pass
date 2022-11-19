@@ -37,7 +37,7 @@ ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_b
 angsd -b chr.bam.list \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
 -GL 2 -doMajorMinor 1 -doMaf 1 -doPost 2 -doVcf 1 -doGlf 2 -minMaf 0.05 -SNP_pval 1e-6 \
--minInd 100 -out HerringLowPass_GATKMethod_MinMAF0.05_${ChrName} -P 20 \
+-out HerringLowPass_GATKMethod_MinMAF0.05_${ChrName} -P 20 \
 -nThreads 20
 
 # Explanation of above settings:
@@ -54,7 +54,6 @@ angsd -b chr.bam.list \
 # -doGlf = ouput genotype likelihoods (4: beagle likelihood format)
 # -minMaf = minumum minor allele frequency tolerated
 # -SNP_pval = significance threshold for determining true polymorphism
-# -minInd = Discard the sites where we don't have data from -minInd individuals (100 here)
 # ==============================
 
 #STEP 6: Convert sample names in VCF to something meaningful
