@@ -1,16 +1,7 @@
-#!/bin/bash -l
-
-#SBATCH --array=1-26:1
-#SBATCH -A snic2022-5-242
-#SBATCH -p core -N 1
-#SBATCH -M rackham
-#SBATCH -t 5:00:00
-#SBATCH -J ANGSD_Association
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
 #Load required modules
 ml bioinfo-tools bcftools vcftools/0.1.16
+ANGSD=/proj/snic2020-2-19/private/herring/users/ashsendell/BIN/angsd/angsd
 
 #If directory "angsd_association_both_sex_phenos" does not exist then create it and move into it
 #Else 
@@ -69,7 +60,7 @@ tail -n +3 $PHENOS | cut -f 1 > phenotyped_samples.IDs.txt
 zcat $VCF \
 | sed 's/VCFv4.2(angsd version)/VCFv4.2/g' \
 | vcftools --vcf - --keep phenotyped_samples.IDs.txt --recode --stdout \
-| bgzip > Subset_${VCF_BASE} # <- can angsd pass gzipped vcfs???
+| bgzip > Subset_${VCF_BASE}
 tabix Subset_${VCF_BASE}
 
 #Get sample order in the VCF file
@@ -87,17 +78,6 @@ do
     cat $PHENOS | grep -w $SAMPLE >> Subset_${PHENOS_BASE}
 done
 
-#Perform association study on body_weight (age and sex = covariates)
-ANGSD=/proj/snic2020-2-19/private/herring/users/ashsendell/BIN/angsd/angsd
-$ANGSD \
--vcf-gp Subset_${VCF_BASE} \
--fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
--sampleFile Subset_${PHENOS_BASE} \
--whichPhe body_weight \
--whichCov sex,age \
--doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
--out ${ChrName}_association_body_wieight
-
 #Perform association study on body_length (age and sex = covariates)
 $ANGSD \
 -vcf-gp Subset_${VCF_BASE} \
@@ -105,25 +85,6 @@ $ANGSD \
 -sampleFile Subset_${PHENOS_BASE} \
 -whichPhe body_length \
 -whichCov sex,age \
--doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
+-doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_body_length
 
-#Perform association study on VS (age and sex = covariates)
-$ANGSD \
--vcf-gp Subset_${VCF_BASE} \
--fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
--sampleFile Subset_${PHENOS_BASE} \
--whichPhe VS \
--whichCov sex,age \
--doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
--out ${ChrName}_association_VS
-
-#Perform association study on VS (age and sex = covariates)
-$ANGSD \
--vcf-gp Subset_${VCF_BASE} \
--fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
--sampleFile Subset_${PHENOS_BASE} \
--whichPhe stomach_weight \
--whichCov sex,age \
--doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
--out ${ChrName}_association_stomach_weight
