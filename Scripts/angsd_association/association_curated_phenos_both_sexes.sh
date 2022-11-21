@@ -4,7 +4,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
 #SBATCH -M rackham
-#SBATCH -t 5-00:00:00
+#SBATCH -t 5:00:00
 #SBATCH -J ANGSD_Association
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -105,7 +105,7 @@ $ANGSD \
 -sampleFile Subset_${PHENOS_BASE} \
 -whichPhe body_length \
 -whichCov sex,age \
--doAsso 4 -nInd $N_INDV -doMaf 4 \
+-doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 \
 -out ${ChrName}_association_body_length
 
 #Perform association study on VS (age and sex = covariates)
