@@ -95,7 +95,7 @@ $ANGSD \
 -sampleFile Subset_${PHENOS_BASE} \
 -whichPhe body_weight \
 -whichCov sex,age \
--doAsso 4 -nInd $N_INDV -doMaf 4 \
+-doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_body_wieight
 
 #Perform association study on body_length (age and sex = covariates)
@@ -105,7 +105,7 @@ $ANGSD \
 -sampleFile Subset_${PHENOS_BASE} \
 -whichPhe body_length \
 -whichCov sex,age \
--doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 \
+-doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_body_length
 
 #Perform association study on VS (age and sex = covariates)
@@ -115,7 +115,7 @@ $ANGSD \
 -sampleFile Subset_${PHENOS_BASE} \
 -whichPhe VS \
 -whichCov sex,age \
--doAsso 4 -nInd $N_INDV -doMaf 4 \
+-doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_VS
 
 #Perform association study on VS (age and sex = covariates)
@@ -125,5 +125,5 @@ $ANGSD \
 -sampleFile Subset_${PHENOS_BASE} \
 -whichPhe stomach_weight \
 -whichCov sex,age \
--doAsso 4 -nInd $N_INDV -doMaf 4 \
+-doAsso 4 -nInd $N_INDV -minInd 100 -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_stomach_weight
