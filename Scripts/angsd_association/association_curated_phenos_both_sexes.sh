@@ -1,3 +1,13 @@
+#!/bin/bash -l
+
+#SBATCH --array=1-26:1
+#SBATCH -A snic2022-5-241
+#SBATCH -p core -N 1
+#SBATCH -M rackham
+#SBATCH -t 1:00:00
+#SBATCH -J ANGSD_Association
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
 
 #Load required modules
 ml bioinfo-tools bcftools vcftools/0.1.16
@@ -54,14 +64,14 @@ PHENOS_BASE=$(basename $PHENOS)
 # |-------------------------------------------------------------------------|
 
 #From curated phenotypes file extract list of sample IDs:
-tail -n +3 $PHENOS | cut -f 1 > phenotyped_samples.IDs.txt
+tail -n +3 $PHENOS | cut -d " " -f 1 > phenotyped_samples.IDs.txt
 
 #Filter VCF file keeping only phenotyped samples
 zcat $VCF \
 | sed 's/VCFv4.2(angsd version)/VCFv4.2/g' \
 | vcftools --vcf - --keep phenotyped_samples.IDs.txt --recode --stdout \
 | bgzip > Subset_${VCF_BASE}
-tabix Subset_${VCF_BASE}
+tabix Subset_${VCF_BASE} -f
 
 #Get sample order in the VCF file
 bcftools query -l Subset_${VCF_BASE} \
@@ -88,3 +98,15 @@ $ANGSD \
 -doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_body_length
 
+#Re-run this time adding spawing season as a covariate
+#Note: Spring-like = 0
+#      Intermediate = 1
+#      Autumn/winter-like = 2
+$ANGSD \
+-vcf-gp Subset_${VCF_BASE} \
+-fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
+-sampleFile Subset_${PHENOS_BASE} \
+-whichPhe body_length \
+-whichCov sex,age,inferred_spawning_season \
+-doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
+-out ${ChrName}_association_body_length_spawing_as_cov
