@@ -4,7 +4,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p node -N 1
 #SBATCH -M rackham
-#SBATCH -t 2-00:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH -J Genotype_likelihoods
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -33,12 +33,14 @@ cd $ChrName
 #Text file containing sample bam paths
 ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_bams/${ChrName}/*.sort.bam > chr.bam.list
 
+#STEP 5: Set path to reference genome
+REF=proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
+
 #STEP 5: Run ANGSD
-angsd -b chr.bam.list \
+angsd -b chr.bam.list -r $REF \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
--GL 2 -doMajorMinor 1 -doMaf 1 -doPost 2 -doVcf 1 -doGlf 2 -minMaf 0.05 -SNP_pval 1e-6 \
--out HerringLowPass_GATKMethod_MinMAF0.05_${ChrName} -P 20 \
--nThreads 20
+-GL 2 -doMajorMinor 4 -doMaf 1 -doPost 2 -doVcf 1 -doGlf 2 -minMaf 0.01 \
+-out HerringLowPass_GATKMethod_MinMAF0.01_${ChrName} -P 20 
 
 # Explanation of above settings:
 # ==============================
@@ -48,7 +50,7 @@ angsd -b chr.bam.list \
 # -minMapQ = minimum mapQ quality
 # -minQ = minimum base quality score
 # -GL = calculate genotype likelihoods (2: using GATK model )
-# -doMajorMinor = infer major and minor alleles (1: from GLs)
+# -doMajorMinor = infer major and minor alleles (4: force the major allele according to the reference state, minor inferred from GLs)
 # -doPost = calculate posterior prob (1: Using frequency as prior)
 # -doVcf = output a VCF file (1: yes)
 # -doGlf = ouput genotype likelihoods (4: beagle likelihood format)
@@ -63,6 +65,11 @@ do
     basename $LINE | cut -d "." -f 2 >> sample.IDs.txt
 done
 
+#There are some inconsistencies in the start of the sample IDs
+#for Hästskär - 1701- and 1707-. So we will replace this with "Hastskar_"
+cat sample.IDs.txt | sed 's/1701-/Hastskar_/g' | sed 's/1707-/Hastskar_/g' > temp
+mv temp sample.IDs.txt
+
 #Update IDs using bcftools
 ml bioinfo-tools bcftools
 bcftools reheader --samples sample.IDs.txt \
@@ -71,4 +78,3 @@ HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
 
 #Remove old VCF file
 rm HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
-
