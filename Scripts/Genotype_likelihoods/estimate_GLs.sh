@@ -25,9 +25,17 @@ ml bioinfo-tools ANGSD/0.921 bcftools
 #STEP 2: Determine chromosome
 ChrName=chr${SLURM_ARRAY_TASK_ID}
 
-#STEP 3: Create directory for chromosome and move into it
-mkdir $ChrName
-cd $ChrName
+#STEP 3: Create directory(ies) and move into it
+if [[ ! -d genotype_likelihoods ]]
+then
+    mkdir genotype_likelihoods
+    cd genotype_likelihoods
+    mkdir $ChrName
+    cd $ChrName
+else
+    mkdir $ChrName
+    cd $ChrName
+fi
 
 #STEP 4: Create bam file list
 #Text file containing sample bam paths
