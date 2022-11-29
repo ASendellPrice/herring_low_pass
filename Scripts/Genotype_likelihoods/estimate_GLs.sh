@@ -20,7 +20,7 @@
 ######################################################################################
 
 #STEP 1: Load required modules
-ml bioinfo-tools ANGSD/0.921
+ml bioinfo-tools ANGSD/0.921 bcftools
 
 #STEP 2: Determine chromosome
 ChrName=chr${SLURM_ARRAY_TASK_ID}
@@ -34,10 +34,10 @@ cd $ChrName
 ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_bams/${ChrName}/*.sort.bam > chr.bam.list
 
 #STEP 5: Set path to reference genome
-REF=proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
+REF=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 
 #STEP 5: Run ANGSD
-angsd -b chr.bam.list -r $REF \
+angsd -b chr.bam.list -ref $REF \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
 -GL 2 -doMajorMinor 4 -doMaf 1 -doPost 2 -doVcf 1 -doGlf 2 -minMaf 0.01 \
 -out HerringLowPass_GATKMethod_MinMAF0.01_${ChrName} -P 20 
@@ -59,22 +59,18 @@ angsd -b chr.bam.list -r $REF \
 # ==============================
 
 #STEP 6: Convert sample names in VCF to something meaningful
-#Convert list of bam paths to sample names
+#Convert list of bam paths to sample names.
+##There are some inconsistencies in the start of the sample IDs
+#for Hästskär - 1701- and 1707-. So we will replace this with "Hastskar_"
 for LINE in $(cat chr.bam.list)
 do
-    basename $LINE | cut -d "." -f 2 >> sample.IDs.txt
+    basename $LINE | cut -d "." -f 2 | sed 's/1701-/Hastskar_/g' | sed 's/1707-/Hastskar_/g' >> sample.IDs.txt
 done
 
-#There are some inconsistencies in the start of the sample IDs
-#for Hästskär - 1701- and 1707-. So we will replace this with "Hastskar_"
-cat sample.IDs.txt | sed 's/1701-/Hastskar_/g' | sed 's/1707-/Hastskar_/g' > temp
-mv temp sample.IDs.txt
-
 #Update IDs using bcftools
-ml bioinfo-tools bcftools
 bcftools reheader --samples sample.IDs.txt \
--o HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}_updatedIDs.vcf.gz \
-HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
+-o HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}_updatedIDs.vcf.gz \
+HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}.vcf.gz
 
 #Remove old VCF file
-rm HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}.vcf.gz
+rm HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}.vcf.gz
