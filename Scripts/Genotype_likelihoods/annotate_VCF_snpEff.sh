@@ -22,10 +22,10 @@
 #cd data/Ch_v2.0.2
 
 #Get annotation files and copy genome
-#wget http://ftp.ensembl.org/pub/release-108/gtf/clupea_harengus/Clupea_harengus.Ch_v2.0.2.108.gtf.gz
-#zcat Clupea_harengus.Ch_v2.0.2.108.gtf.gz | grep '#!' > genes.gtf
-#zcat Clupea_harengus.Ch_v2.0.2.108.gtf.gz | grep -v '#!' | grep -v 'unplaced_' | sed -e 's/^/chr/' >> genes.gtf
-#rm Clupea_harengus.Ch_v2.0.2.108.gtf.gz
+#wget http://ftp.ensembl.org/pub/release-106/gtf/clupea_harengus/Clupea_harengus.Ch_v2.0.2.106.gtf.gz
+#zcat Clupea_harengus.Ch_v2.0.2.106.gtf.gz | grep '#!' > genes.gtf
+#zcat Clupea_harengus.Ch_v2.0.2.106.gtf.gz | grep -v '#!' | grep -v 'unplaced_' | sed -e 's/^/chr/' >> genes.gtf
+#rm Clupea_harengus.Ch_v2.0.2.106.gtf.gz
 #ln -s /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta sequences.fa
 
 #Add genome to cofig file
@@ -62,7 +62,7 @@ java -jar $snpEff_jar Ch_v2.0.2 $CHROM_VCF -ud 0 > ${ChrName}.temp.annotated.vcf
 #Extract annotations from VCF
 #If multiple effects one will be printed per line
 cat ${ChrName}.temp.annotated.vcf | $snpEff_perl \
-| java -jar $snpSift_jar extractFields - CHROM POS REF ALT "ANN[*].EFFECT" "ANN[*].IMPACT" "ANN[*].GENE" \
+| java -jar $snpSift_jar extractFields - CHROM POS REF ALT "ANN[*].EFFECT" "ANN[*].IMPACT" "ANN[*].GENE" "ANN[*].GENEID:" \
 | uniq \
 > ${ChrName}_variant_effects.snpEff.txt
 
