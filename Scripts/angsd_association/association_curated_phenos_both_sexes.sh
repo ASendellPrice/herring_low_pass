@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #SBATCH --array=1-26:1
-#SBATCH -A snic2022-5-241
+#SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
 #SBATCH -M rackham
 #SBATCH -t 1:00:00
@@ -98,15 +98,22 @@ $ANGSD \
 -doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_body_length
 
-#Re-run this time adding spawing season as a covariate
-#Note: Spring-like = 0
-#      Intermediate = 1
-#      Autumn/winter-like = 2
+#Perform association study on body_weight (age and sex = covariates)
 $ANGSD \
 -vcf-gp Subset_${VCF_BASE} \
 -fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
 -sampleFile Subset_${PHENOS_BASE} \
--whichPhe body_length \
--whichCov sex,age,inferred_spawning_season \
+-whichPhe body_weight \
+-whichCov sex,age \
 -doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
--out ${ChrName}_association_body_length_spawing_as_cov
+-out ${ChrName}_association_body_weight
+
+#Perform association study on stomach_weight (age and sex = covariates)
+$ANGSD \
+-vcf-gp Subset_${VCF_BASE} \
+-fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
+-sampleFile Subset_${PHENOS_BASE} \
+-whichPhe stomach_weight \
+-whichCov sex,age \
+-doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
+-out ${ChrName}_association_stomach_weight
