@@ -1,7 +1,7 @@
 	-> Command: 
-angsd -b HerringLowPass_GATKMethod_MYHC_region.bam.list -ref /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 -GL 2 -doMajorMinor 4 -doMaf 1 -doGlf 2 -r chr12 -sites /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/myhc_region_top_differentiated_snps.txt -out HerringLowPass_GATKMethod_MYHC_region 
+angsd -b HerringLowPass_GATKMethod_MYHC_region.bam.list -ref /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 -GL 2 -doMajorMinor 4 -doMaf 1 -minMaf 0.01 -doGlf 2 -r chr12:15763753-16047860 -out HerringLowPass_GATKMethod_MYHC_region 
 	-> angsd version: 0.921 (htslib: 1.6) build(Apr 18 2018 16:49:56)
-	-> Mon Dec  5 09:26:15 2022
+	-> Tue Dec  6 10:13:58 2022
 ----------------
 multiReader.cpp:
 	-nLines	50	(Number of lines to read)
@@ -22,7 +22,7 @@ multiReader.cpp:
 parseArgs_bambi.cpp: bam reader:
 	-bam/-b		HerringLowPass_GATKMethod_MYHC_region.bam.list	(list of BAM/CRAM files)
 	-i		HerringLowPass_GATKMethod_MYHC_region.bam.list	(Single BAM/CRAM file)
-	-r		chr12	Supply a single region in commandline (see examples below)
+	-r		chr12:15763753-16047860	Supply a single region in commandline (see examples below)
 	-rf		(null)	Supply multiple regions in a file (see examples below)
 	-remove_bads	1	Discard 'bad' reads, (flag >=256) 
 	-uniqueOnly	1	Discards reads that doesn't map uniquely
@@ -56,10 +56,10 @@ Examples for region specification:
 	-howOften	100	How often should the program show progress
 --------------
 abcFilter.cpp:
-	-sites		/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/myhc_region_top_differentiated_snps.txt	(File containing sites to keep (chr pos))
-	-sites		/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/myhc_region_top_differentiated_snps.txt	(File containing sites to keep (chr regStart regStop))
-	-sites		/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/myhc_region_top_differentiated_snps.txt	(File containing sites to keep (chr pos major minor))
-	-sites		/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/myhc_region_top_differentiated_snps.txt	(File containing sites to keep (chr pos major minor af ac an))
+	-sites		(null)	(File containing sites to keep (chr pos))
+	-sites		(null)	(File containing sites to keep (chr regStart regStop))
+	-sites		(null)	(File containing sites to keep (chr pos major minor))
+	-sites		(null)	(File containing sites to keep (chr pos major minor af ac an))
 	-minInd		0	Only use site if atleast minInd of samples has data
 	-minIndDepth	1	Only use site if atleast minInd of samples has this minimum depth 
 	-capDepth	-1	Only use the first capDepth bases
@@ -163,7 +163,7 @@ abcFreq.cpp:
 	3: Using SFS as prior (still in development)
 	4: Using reference panel as prior (still in development), requires a site file with chr pos major minor af ac an
 Filters:
-	-minMaf  	-1.000000	(Remove sites with MAF below)
+	-minMaf  	0.010000	(Remove sites with MAF below)
 	-SNP_pval	1.000000	(Remove sites with a pvalue larger)
 	-rmTriallelic	0.000000	(Remove sites with a pvalue lower)
 Extras:
@@ -183,5 +183,5 @@ abcHetPlas.cpp:
 		->"HerringLowPass_GATKMethod_MYHC_region.beagle.gz"
 		->"HerringLowPass_GATKMethod_MYHC_region.mafs.gz"
 
-	[ALL done] cpu-time used =  14505.81 sec
-	[ALL done] walltime used =  14776.00 sec
+	[ALL done] cpu-time used =  402.15 sec
+	[ALL done] walltime used =  886.00 sec

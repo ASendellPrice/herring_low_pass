@@ -27,8 +27,8 @@ REF=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 #Set chromosome name, output prefix and region start / end positions
 CHROM=chr15
 OUT=HerringLowPass_GATKMethod_TSHR_region
-START=7748604
-END=11005151
+START=8850000
+END=8950000
 
 #Create bam file list
 #Text file containing sample bam paths
