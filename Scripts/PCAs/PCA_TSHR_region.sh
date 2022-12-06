@@ -45,7 +45,7 @@ angsd -b ${OUT}.bam.list \
 
 #Create covariance matrix
 pcangsd.py -beagle ${OUT}.beagle.gz \
--minMaf 0.005 -iter 10000 -o $OUT
+-minMaf 0.01 -iter 10000 -o $OUT
 
 #Convert bam list to list of sample names
 for LINE in $(cat ${OUT}.bam.list)
