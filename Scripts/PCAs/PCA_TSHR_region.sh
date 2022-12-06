@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
-#SBATCH -A snic2022-5-242
-#SBATCH -p core -n 1
+#SBATCH -A snic2022-5-241
+#SBATCH -p core -n 8
 #SBATCH -M rackham
-#SBATCH -t 5:00:00
+#SBATCH -t 14:00:00
 #SBATCH -J PCA_TSHR
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -24,10 +24,11 @@ fi
 SAMPLE_LIST=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/samples_for_spawing_PCA.txt
 REF=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 
-#Set chromosome name, output prefix and path to site list
+#Set chromosome name, output prefix and region start / end positions
 CHROM=chr15
 OUT=HerringLowPass_GATKMethod_TSHR_region
-SITES=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/tshr_region_top_differentiated_snps.txt
+START=7748604
+END=11005151
 
 #Create bam file list
 #Text file containing sample bam paths
@@ -37,11 +38,10 @@ ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_b
 done
 
 #Create beagle file for region of interest
-angsd sites index $SITES
 angsd -b ${OUT}.bam.list -ref $REF \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
--GL 2 -doMajorMinor 4 -doMaf 1 -doGlf 2 \
--r $CHROM -sites $SITES -out $OUT
+-GL 2 -doMajorMinor 4 -doMaf 1 -minMaf 0.01 -doGlf 2 \
+-r ${CHROM}:${START}-${END} -out $OUT
 
 #Create covariance matrix
 pcangsd.py -beagle ${OUT}.beagle.gz \

@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
-#SBATCH -A snic2022-5-242
+#SBATCH -A snic2022-5-241
 #SBATCH -p core -n 1
 #SBATCH -M rackham
-#SBATCH -t 5:00:00
+#SBATCH -t 14:00:00
 #SBATCH -J PCA_MYHC_region
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -40,7 +40,7 @@ done
 #Create beagle file for region of interest
 angsd -b ${OUT}.bam.list -ref $REF \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
--GL 2 -doMajorMinor 4 -doMaf 1 -doGlf 2 \
+-GL 2 -doMajorMinor 4 -doMaf 1 -minMaf 0.01 -doGlf 2 \
 -r ${CHROM}:${START}-${END} -out $OUT
 
 #Create covariance matrix
