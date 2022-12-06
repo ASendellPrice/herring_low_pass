@@ -40,12 +40,12 @@ done
 #Create beagle file for region of interest
 angsd -b ${OUT}.bam.list \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
--GL 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.01 -doGlf 2 \
+-GL 2 -doMajorMinor 1 -doMaf 1 -doGlf 2 \
 -r ${CHROM}:${START}-${END} -out $OUT
 
 #Create covariance matrix
 pcangsd.py -beagle ${OUT}.beagle.gz \
--minMaf 0.01 -iter 10000 -o $OUT
+-minMaf 0.005 -iter 10000 -o $OUT
 
 #Convert bam list to list of sample names
 for LINE in $(cat ${OUT}.bam.list)
