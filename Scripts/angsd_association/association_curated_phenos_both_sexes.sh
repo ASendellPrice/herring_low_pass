@@ -2,7 +2,7 @@
 
 #SBATCH --array=1-26:1
 #SBATCH -A snic2022-5-242
-#SBATCH -p core -N 1
+#SBATCH -p core -n 8
 #SBATCH -M rackham
 #SBATCH -t 1:00:00
 #SBATCH -J ANGSD_Association
@@ -31,7 +31,7 @@ mkdir $ChrName
 cd $ChrName
 
 #Set path to VCF file and curated phenotypes file
-VCF=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/genotype_likelihoods/${ChrName}/HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}_updatedIDs.vcf.gz
+VCF=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/genotype_likelihoods/${ChrName}/HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}_updatedIDs.vcf.gz
 PHENOS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/curated_phenos_both_sexes.input.txt
 
 #Get basename for VCF and PHENOS
@@ -117,3 +117,12 @@ $ANGSD \
 -whichCov sex,age \
 -doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_stomach_weight
+
+#Perform association study on sex (no covariates)
+$ANGSD \
+-vcf-gp Subset_${VCF_BASE} \
+-fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
+-sampleFile Subset_${PHENOS_BASE} \
+-whichPhe sex \
+-doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
+-out ${ChrName}_association_sex

@@ -52,6 +52,11 @@ ${GLIMPSE_DIR}/sample/bin/GLIMPSE_sample --input $IN --solve --output $OUT
 bcftools view -q 0.01:minor $OUT | bgzip > ${OUT2}.gz
 tabix ${OUT2}.gz
 
+#STEO 7: Cleaning up
+rm ${ChrName}.imputed.merged.bcf*
+rm list.${ChrName}.txt
+rm ${ChrName}.phased.imputed.merged.vcf
+
 #END
 
 

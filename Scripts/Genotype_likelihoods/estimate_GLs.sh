@@ -33,18 +33,17 @@ then
     mkdir $ChrName
     cd $ChrName
 else
-    mkdir $ChrName
-    cd $ChrName
+    mkdir genotype_likelihoods/${ChrName}
+    cd genotype_likelihoods/${ChrName}
 fi
 
 #STEP 4: Create bam file list
 #Text file containing sample bam paths
 ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_bams/${ChrName}/*.sort.bam > chr.bam.list
 
-#STEP 5: Set path to reference genome
-REF=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
-
 #STEP 5: Run ANGSD
+#Note: major allele = reference / alt determined by GLs
+REF=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 angsd -b chr.bam.list -ref $REF \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
 -GL 2 -doMajorMinor 4 -doMaf 1 -doPost 2 -doVcf 1 -doGlf 2 -minMaf 0.01 \
@@ -82,3 +81,4 @@ HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}.vcf.gz
 
 #Remove old VCF file
 rm HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}.vcf.gz
+rm sample.IDs.txt
