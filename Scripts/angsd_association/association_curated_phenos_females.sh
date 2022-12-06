@@ -4,7 +4,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
 #SBATCH -M rackham
-#SBATCH -t 5-00:00:00
+#SBATCH -t 15:00:00
 #SBATCH -J ANGSD_Association
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -202,4 +202,3 @@ $ANGSD \
 -whichCov age \
 -doAsso 4 -nInd $N_INDV -doMaf 4 \
 -out ${ChrName}_association_female_RfecTL3
-
