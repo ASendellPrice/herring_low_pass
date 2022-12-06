@@ -1,10 +1,10 @@
 #!/bin/bash -l
 
 #SBATCH --array=1-26:1
-#SBATCH -A snic2022-5-242
-#SBATCH -p core -n 8
+#SBATCH -A snic2022-5-241
+#SBATCH -p core -n 1
 #SBATCH -M rackham
-#SBATCH -t 1:00:00
+#SBATCH -t 10:00:00
 #SBATCH -J ANGSD_Association
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -51,17 +51,18 @@ PHENOS_BASE=$(basename $PHENOS)
 # Data lines: Data for each sample. There should be one data line per sample in the genotypes file,
 # these must be in the same order that they appear in the genotypes file.
 
-# |-------------------------------------------------------------------------|
-# | ID        | sex | age | VS | stomach_weight | body_weight | body_length | <- Header line
-# | 0         | B   | D   | D  | P              | P           | P           | <- Column type line
-# | 1701-947  | 1   | 6   | 56 | 2.19           | 80.8        | 22.8        | <- Data lines
-# | 1701-967  | 1   | 7   | 55 | 1.19           | 68.1        | 20.4        |
-# | 1707-1    | 1   | 5   | 57 | 0.70           | 64.5        | 21          |
-# | 1707-10   | 1   | 7   | 56 | 0.75           | 70.5        | 21.7        |
-# | 1707-100  | 1   | 5   | NA | 0.81           | 67.9        | 21          |
-# | 1707-101  | 1   | 5   | 56 | 0.90           | 57          | 18.9        |
-# | 1707-102  | 1   | 6   | 56 | 0.46           | 56.9        | 19.2        |
-# |-------------------------------------------------------------------------|
+# |------------------------------------------------------------------------------------------------------------|
+# | ID              sex     age     maturity    VS      stomach_weight  body_weight     body_length     ID_2   | <- Header line
+# | 0               B       D       D           D       P               P               P               D      | <- Column type line
+# | Hastskar_184    0       6       6           56      1.05            76.8            20.8            184    | <- Data lines
+# | Hastskar_185    0       6       6           55      0.50            58.6            19.5            185    |
+# | Hastskar_186    0       6       5           55      0.53            49.2            18.7            186    |
+# | Hastskar_187    0       4       6           55      0.40            45.4            18.2            187    |
+# | Hastskar_188    0       6       5           56      1.54            64.1            21.4            188    |
+# | Hastskar_189    0       5       6           55      0.75            49.6            19.7            189    |
+# | Hastskar_190    0       6       6           56      0.41            60.2            20.7            190    |
+# | Hastskar_191    0       6       6           56      0.58            59.1            20.7            191    |
+# |------------------------------------------------------------------------------------------------------------|
 
 #From curated phenotypes file extract list of sample IDs:
 tail -n +3 $PHENOS | cut -d " " -f 1 > phenotyped_samples.IDs.txt
@@ -118,11 +119,11 @@ $ANGSD \
 -doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
 -out ${ChrName}_association_stomach_weight
 
-#Perform association study on sex (no covariates)
+#Perform association study on VS
 $ANGSD \
 -vcf-gp Subset_${VCF_BASE} \
 -fai /proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta.fai \
 -sampleFile Subset_${PHENOS_BASE} \
--whichPhe sex \
+-whichPhe VS \
 -doAsso 4 -nInd $N_INDV -doMaf 4 -Pvalue 1 \
--out ${ChrName}_association_sex
+-out ${ChrName}_association_VS
