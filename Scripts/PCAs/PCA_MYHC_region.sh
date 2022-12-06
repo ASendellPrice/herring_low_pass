@@ -27,7 +27,8 @@ REF=/proj/snic2020-2-19/private/herring/assembly/Ch_v2.0.2.fasta
 #Set chromosome name, output prefix and path to site list
 CHROM=chr12
 OUT=HerringLowPass_GATKMethod_MYHC_region
-SITES=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/myhc_region_top_differentiated_snps.txt
+START=15763753
+END=16047860
 
 #Create bam file list
 #Text file containing sample bam paths
@@ -37,11 +38,10 @@ ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_b
 done
 
 #Create beagle file for region of interest
-angsd sites index $SITES
 angsd -b ${OUT}.bam.list -ref $REF \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
 -GL 2 -doMajorMinor 4 -doMaf 1 -doGlf 2 \
--r $CHROM -sites $SITES -out $OUT
+-r ${CHROM}:${START}-${END} -out $OUT
 
 #Create covariance matrix
 pcangsd.py -beagle ${OUT}.beagle.gz \
