@@ -3,7 +3,7 @@
 #SBATCH -A snic2022-5-241
 #SBATCH -p core -n 8
 #SBATCH -M rackham
-#SBATCH -t 14:00:00
+#SBATCH -t 2:00:00
 #SBATCH -J PCA_TSHR
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ashley.sendell-price@imbim.uu.se
@@ -38,9 +38,9 @@ ls /proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/chrom_b
 done
 
 #Create beagle file for region of interest
-angsd -b ${OUT}.bam.list -ref $REF \
+angsd -b ${OUT}.bam.list \
 -uniqueOnly 1 -remove_bads 1 -only_proper_pairs 1 -minMapQ 20 -minQ 20 -checkBamHeaders 0 \
--GL 2 -doMajorMinor 4 -doMaf 1 -minMaf 0.01 -doGlf 2 \
+-GL 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.01 -doGlf 2 \
 -r ${CHROM}:${START}-${END} -out $OUT
 
 #Create covariance matrix
