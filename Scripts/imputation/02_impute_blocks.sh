@@ -23,11 +23,15 @@ ml bioinfo-tools ABINIT/8.10.3 GCCcore/8.3.0 bcftools/1.10 samtools vcftools
 ######################################################################################
 
 ChrName=chr${SLURM_ARRAY_TASK_ID}
-cd GLIMPSE_imputation/${ChrName}/reference
+cd GLIMPSE_imputation/${ChrName}
+DIRECTORY=$(pwd)
 
 ######################################################################################
 # Split the chromosome into chunks
 ######################################################################################
+
+#Move into referencd directory
+cd reference
 
 #Index VCF (this is the reference panel)
 bcftools index ${ChrName}.herring_79individuals.filtered.phased.vcf.gz
@@ -98,9 +102,9 @@ cd ../
 mkdir -p GLIMPSE_impute
 cd GLIMPSE_impute
 
-VCF=../genotype_likelihoods/merged.${ChrName}.vcf.gz
-REF=../reference/${ChrName}.herring_79individuals.filtered.phased.vcf.gz
-MAP=../../../resources/imputation/chrom_maps/${ChrName}.GLIMPSE.gmap.txt
+VCF=${DIRECTORY}/genotype_likelihoods/merged.${ChrName}.vcf.gz
+REF=${DIRECTORY}/reference/${ChrName}.herring_79individuals.filtered.phased.vcf.gz
+MAP=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/imputation/chrom_maps/${ChrName}.GLIMPSE.gmap.txt
 
 while IFS="" read -r LINE || [ -n "$LINE" ];
 do
@@ -115,3 +119,34 @@ sbatch ../../../Scripts/imputation/impute_chunk.sh $VCF $REF $MAP $IRG $ORG $OUT
 done < ../reference/chunks.${ChrName}.txt
 
 ######################################################################################
+
+
+
+
+for CHROM in $(seq 2 3)
+do
+
+ChrName=chr${CHROM}
+cd $ChrName
+DIRECTORY=$(pwd)
+cd GLIMPSE_impute
+
+VCF=${DIRECTORY}/genotype_likelihoods/merged.${ChrName}.vcf.gz
+REF=${DIRECTORY}/reference/${ChrName}.herring_79individuals.filtered.phased.vcf.gz
+MAP=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/imputation/chrom_maps/${ChrName}.GLIMPSE.gmap.txt
+
+while IFS="" read -r LINE || [ -n "$LINE" ];
+do
+printf -v ID "%02d" $(echo $LINE | cut -d" " -f1)
+IRG=$(echo $LINE | cut -d" " -f3)
+ORG=$(echo $LINE | cut -d" " -f4)
+OUT=${ChrName}.${ID}_GLIMPSE.bcf
+
+#Launch glimpse imputation on chunk in a seperate job, passing the required variables
+sbatch ../../../Scripts/imputation/impute_chunk.sh $VCF $REF $MAP $IRG $ORG $OUT
+
+done < ../reference/chunks.${ChrName}.txt
+
+cd ../../
+
+done
