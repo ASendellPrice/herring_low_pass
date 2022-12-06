@@ -1,4 +1,4 @@
-sample_ID	age	maturity	gonad_weight	MOD	LC	Diam.min	Diam.max	Diam.sd	SW	K	GSI	GSIs	Fec	Rfec	RfecS	RfecTL3	ID_2
+ID	age	maturity	gonad_weight	MOD	LC	Diam.min	Diam.max	Diam.sd	SW	K	GSI	GSIs	Fec	Rfec	RfecS	RfecTL3	ID_2
 0			D	D	P	P	P	P	P	P	P	P	P	P	P	P	P	P	D
 Hastskar_1	5	5	5.36	1017	1068	909	1109	33.3	53.0	0.70	17.78	21.63	14.522	225	274	157	1
 Hastskar_2	5	5	4.00	1084	1144	1014	1174	34.9	46.0	0.74	15.68	18.59	9.188	168	200	124	2

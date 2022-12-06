@@ -30,7 +30,7 @@ mkdir $ChrName
 cd $ChrName
 
 #Set path to VCF file and curated phenotypes file
-VCF=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/genotype_likelihoods/${ChrName}/HerringLowPass_GATKMethod_MinMAF0.05_${ChrName}_updatedIDs.vcf.gz
+VCF=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/genotype_likelihoods/${ChrName}/HerringLowPass_GATKMethod_MinMAF0.01_${ChrName}_updatedIDs.vcf.gz
 PHENOS=/proj/snic2020-2-19/private/herring/users/ashsendell/herring_low_pass/resources/curated_phenos_females.input.txt
 
 #Get basename for VCF and PHENOS
